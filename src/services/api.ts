@@ -1,10 +1,52 @@
 
 import { Note, NoteLength } from '@/types/Note';
+import { getApiKeys, hasRequiredApiKeys } from './apiKeyManager';
+
+// Check if API keys are available
+const checkApiKeysAvailable = () => {
+  if (!hasRequiredApiKeys()) {
+    throw new Error('Required API keys are missing. Please configure them in API Settings.');
+  }
+};
+
+// Helper to get Google Books data
+const fetchGoogleBooksData = async (query: string) => {
+  const keys = getApiKeys();
+  const apiKey = keys.googleBooks;
+  
+  if (!apiKey) return null;
+  
+  try {
+    const response = await fetch(
+      `https://www.googleapis.com/books/v1/volumes?q=${encodeURIComponent(query)}&key=${apiKey}`
+    );
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching from Google Books:', error);
+    return null;
+  }
+};
+
+// Helper to get Open Library data (no API key needed)
+const fetchOpenLibraryData = async (query: string) => {
+  try {
+    const response = await fetch(
+      `https://openlibrary.org/search.json?q=${encodeURIComponent(query)}`
+    );
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching from Open Library:', error);
+    return null;
+  }
+};
 
 // Mock API service (would be replaced with actual backend calls)
 export const generateNotes = async (query: string, length: NoteLength): Promise<Note> => {
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 2000));
+  
+  // For real implementation, we would check API keys here
+  // checkApiKeysAvailable();
   
   // Simulate response based on query and length
   const id = Math.random().toString(36).substring(2, 11);
