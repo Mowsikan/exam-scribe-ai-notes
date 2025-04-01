@@ -1,20 +1,10 @@
-
 import { Note, NoteLength } from '@/types/Note';
-import { getApiKeys, hasRequiredApiKeys } from './apiKeyManager';
-
-// Check if API keys are available
-const checkApiKeysAvailable = () => {
-  if (!hasRequiredApiKeys()) {
-    throw new Error('Required API keys are missing. Please configure them in API Settings.');
-  }
-};
+import { getApiKeys } from './apiKeyManager';
 
 // Helper to get Google Books data
 const fetchGoogleBooksData = async (query: string) => {
   const keys = getApiKeys();
   const apiKey = keys.googleBooks;
-  
-  if (!apiKey) return null;
   
   try {
     const response = await fetch(
@@ -45,8 +35,12 @@ export const generateNotes = async (query: string, length: NoteLength): Promise<
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 2000));
   
-  // For real implementation, we would check API keys here
-  // checkApiKeysAvailable();
+  // Fetch data from APIs
+  const booksData = await fetchGoogleBooksData(query);
+  const openLibraryData = await fetchOpenLibraryData(query);
+  
+  // In a real implementation, we would process the API data here
+  // and use the Hugging Face API for AI-powered summarization
   
   // Simulate response based on query and length
   const id = Math.random().toString(36).substring(2, 11);

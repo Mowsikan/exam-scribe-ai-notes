@@ -2,7 +2,6 @@
 import React from 'react';
 import { Book } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import ApiKeySettings from './ApiKeySettings';
 
 const Header = () => {
   return (
@@ -15,7 +14,6 @@ const Header = () => {
           </h1>
         </div>
         <div className="flex items-center gap-2">
-          <ApiKeySettings />
           <Button variant="outline" size="sm">
             History
           </Button>

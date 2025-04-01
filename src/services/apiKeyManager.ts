@@ -10,21 +10,23 @@ export interface ApiKeys {
   huggingFace?: string;
 }
 
-// Get API keys from localStorage
-export const getApiKeys = (): ApiKeys => {
-  const keysJson = localStorage.getItem('examscribe_api_keys');
-  return keysJson ? JSON.parse(keysJson) : {};
+// Hardcoded API keys (replace these with your actual API keys)
+const hardcodedApiKeys: ApiKeys = {
+  googleBooks: 'YOUR_GOOGLE_BOOKS_API_KEY_HERE',
+  huggingFace: 'YOUR_HUGGINGFACE_API_KEY_HERE'
 };
 
-// Save API key to localStorage
+// Get API keys
+export const getApiKeys = (): ApiKeys => {
+  return hardcodedApiKeys;
+};
+
+// Save API key (for internal use only)
 export const saveApiKey = (name: ApiKeyName, value: string): void => {
-  const keys = getApiKeys();
-  keys[name] = value;
-  localStorage.setItem('examscribe_api_keys', JSON.stringify(keys));
+  hardcodedApiKeys[name] = value;
 };
 
 // Check if all required API keys are available
 export const hasRequiredApiKeys = (): boolean => {
-  const keys = getApiKeys();
-  return !!keys.googleBooks && !!keys.huggingFace;
+  return !!hardcodedApiKeys.googleBooks && !!hardcodedApiKeys.huggingFace;
 };
